@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}Editá tu perfil!{% endblock %}
+{% block content %}
+
+    {% if user.is_authenticated %}
+        {% if user.id == perfil.user.id %}
+            <h1>Actualiza tu perfil..</h1>
+
+            <br/><br/>
+            <div class='form-group'>
+                <form method='POST' enctype='multipart/form-data'>
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button class="btn btn-success">Actualizar Perfil!</button>
+                </form>
+            </div>
+
+        {% else %}
+            Usuario Incorrecto.
+        {% endif %}
+
+    {% else %}
+        Acceso Denegado.
+    {% endif %}
+
+{% endblock %}

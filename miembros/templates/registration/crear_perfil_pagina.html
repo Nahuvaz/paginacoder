@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Creá un Perfil!{% endblock %}
+{% block content %}
+
+{%if user.is_authenticated %}
+
+    <h1>Crea una pagina para tu perfil..</h1>
+
+    <br/><br/>
+    <div class='form-group'>
+        <form method='POST' enctype='multipart/form-data'>
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn btn-success">Crear pagina</button>
+        </div>
+{% else %}
+
+Acceso Denegado.
+        
+{% endif %}
+
+{% endblock %}

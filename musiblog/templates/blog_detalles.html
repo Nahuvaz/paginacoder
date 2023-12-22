@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}{{ post.titulo_tag }}{% endblock %}
+
+{% block content %}
+
+<h1>{{ post.titulo }}</h1>
+<strong><small> Por: 
+    {{ post.autor.first_name }} 
+    {{ post.autor.last_name }} - 
+    {{ post.fecha_post }} -
+    <br/>
+    {{ post.subtitle }}
+  </strong>
+    {%if user.is_authenticated %}
+      
+      {% if user.id == post.autor.id %}
+
+        <a href='{% url 'actualizar_post' post.pk %}'>(Editar)</a>
+
+        <a href='{% url 'eliminar_post' post.pk %}'>(Eliminar)</a> 
+      {% endif %}
+
+    {% else %}
+
+    Acceso Denegado.
+        
+    {% endif %}
+       
+</small><br/>
+<hr>
+
+{{ post.body }}
+<br/><br/>
+{% if post.header_image %}
+<img src='{{ post.header_image.url }}'>
+{% endif %}
+<br/><br/>
+<h1>Comentarios:</h1>
+<br/>
+{% if not post.comments.all %}
+      No hay comentarios todavia...<a href="{% url 'añadir_comentarios' post.pk %}">Añadir uno</a>
+{% else %}
+
+<a href="{% url 'añadir_comentarios' post.pk %}">Añadir Comentario</a>
+<br/><br/>
+
+
+    {% for comment in post.comments.all %}
+        <strong>
+          {{ comment.name }} - 
+          {{ comment.date_added }}
+        </strong>
+          <br/>
+          {{ comment.body }}
+          <br/><br/>
+
+    {% endfor %}
+
+    <a href="{% url 'añadir_comentarios' post.pk %}">Añadir Comentario</a>
+
+{% endif %}
+<br/><br/>
+<a href='{% url 'inicio' %}' class="btn btn-info">Volver</a>
+<br/><br/>
+
+
+<div class="card mb-3">
+    <div class="row g-0">
+      <div class="col-md-2">
+{% if post.autor.perfil.imagen_perfil %}
+        <img src="{{ post.autor.perfil.imagen_perfil.url }}" class="img-fluid rounded-start">
+{% else %}
+        <img src="{% static 'musiblog/images/mfdoom.png' %}" class="img-fluid rounded-start">
+{% endif %}
+<br/>
+
+
+<br/><br/>
+
+      </div>
+      <div class="col-md-9">
+        <div class="card-body">
+          <h5 class="card-title">
+                {{ post.autor.first_name }} 
+                {{ post.autor.last_name }}
+        </h5>
+        <p class='small text-muted'>
+    
+            <a href="{% url 'usuario_perfil' post.autor.perfil.id %}">Perfil de Usuario</a>
+            <br/><br/>
+          <p class="card-text">
+            {{ post.autor.perfil.bio }}                
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+{% endblock %}

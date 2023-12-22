@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<h1>Bienvenido a Musiblog!</h1>
+
+{% for post in object_list %}
+       <li><a href="{% url 'blog-detalle' post.pk %}">
+       {{ post.titulo }}</a> 
+          
+          - <a href='{% url 'categorias' post.category %}'>{{ post.category }}</a>
+          - {{ post.autor.first_name }} 
+          {{ post.autor.last_name}} - {{ post.fecha_post }} 
+
+              {%if user.is_authenticated %}
+                     {% if user.id == post.autor.id %}
+                            <a href='{% url 'actualizar_post' post.pk %}'>(Editar)</a> <br/>
+                            <a href='{% url 'eliminar_post' post.pk %}'>(Eliminar)</a> <br/>
+                     {% endif %}
+              {% endif %}
+
+              
+              {{ post.subtitle }}</li>       
+{% endfor%}
+</ul>
+
+{% endblock %}
